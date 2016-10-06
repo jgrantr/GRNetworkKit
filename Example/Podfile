@@ -1,0 +1,12 @@
+use_frameworks!
+
+target 'GRNetworkKit_Example' do
+  pod 'GRNetworkKit', :path => '../'
+
+  target 'GRNetworkKit_Tests' do
+    inherit! :search_paths
+
+    pod 'Specta'
+  pod 'Expecta'
+  end
+end
