@@ -31,6 +31,28 @@
 	return [[HttpPostStream alloc] initWithPost:self];
 }
 
++ (NSMutableURLRequest *) POST:(NSURL *)url values:(NSDictionary<NSString *,id> *)values {
+	GRHttpPost *post = [self withValues:values];
+	return [self POST:url withPost:post];
+}
+
++ (NSMutableURLRequest *) POST:(NSURL *)url withPost:(GRHttpPost *)post {
+	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+	return [post configureURLRequest:request];
+}
+
++ (NSMutableURLRequest *) POST:(NSURL *)url cache:(NSURLRequestCachePolicy)cachePolicy timeout:(NSTimeInterval)timeout values:(NSDictionary<NSString *,id> *)values
+{
+	GRHttpPost *post = [self withValues:values];
+	return [self POST:url cache:cachePolicy timeout:timeout post:post];
+}
+
++ (NSMutableURLRequest *) POST:(NSURL *)url cache:(NSURLRequestCachePolicy)cachePolicy timeout:(NSTimeInterval)timeout post:(GRHttpPost *)post
+{
+	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url cachePolicy:cachePolicy timeoutInterval:timeout];
+	return [post configureURLRequest:request];
+}
+
 + (instancetype) withValues:(NSDictionary<NSString *,id> *)values {
 	GRHttpPost *post = [[GRHttpPost alloc] init];
 	[values enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
@@ -117,6 +139,22 @@
 	param.contentType = _contentType;
 	[values setObject:param forKey:key];
 	return YES;
+}
+
+- (NSMutableURLRequest *) configureURLRequest:(NSURLRequest *)incoming {
+	NSMutableURLRequest *request = nil;
+	if (![incoming isKindOfClass:[NSMutableURLRequest class]]) {
+		request = [incoming mutableCopy];
+	}
+	else {
+		request = (NSMutableURLRequest *)incoming;
+	}
+	request.HTTPMethod = @"POST";
+	HttpPostStream *stream = self.stream;
+	request.HTTPBodyStream = stream;
+	[request addValue:[NSString stringWithFormat:@"multipart/form-data;boundary=%@", stream.boundary] forHTTPHeaderField:@"Content-Type"];
+	[request addValue:[[NSNumber numberWithLongLong:stream.contentLength] stringValue] forHTTPHeaderField:@"Content-Length"];
+	return request;
 }
 
 
