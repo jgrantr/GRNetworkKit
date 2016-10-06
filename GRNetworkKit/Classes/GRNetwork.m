@@ -8,8 +8,6 @@
 #import <UIKit/UIKit.h>
 #import <CocoaLumberjack/CocoaLumberjack.h>
 
-static DDLogLevel ddLogLevel = DDLogLevelInfo;
-
 #ifndef GR_STATIC_FRAMEWORK
 BOOL kGRNetworkAllowInsecureConnections = NO;
 #endif

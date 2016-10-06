@@ -12,4 +12,8 @@
 #define LOG_LEVEL_DEF ddLogLevel
 #define LOG_ASYNC_ENABLED YES
 
+#import <CocoaLumberjack/CocoaLumberjack.h>
+
+static DDLogLevel ddLogLevel = DDLogLevelInfo;
+
 #endif /* MyLogging_h */

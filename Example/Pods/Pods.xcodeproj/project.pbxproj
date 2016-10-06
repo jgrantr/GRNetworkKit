@@ -134,6 +134,12 @@
 		9274C451D9A242981D3F568B47BE04A5 /* DDASLLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = EFAFB68360594C744E3F71888C7DB69D /* DDASLLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9310F5C9F4F233D227CFC6ECC953299A /* hang.m in Sources */ = {isa = PBXBuildFile; fileRef = C883B7D309C3B57DD9217D753BA9A58F /* hang.m */; };
 		931D410B9F8ACB935883DF8C59F9C93E /* EXPMatchers+postNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = C855544D89833488B829CCD6E230EC42 /* EXPMatchers+postNotification.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		932D84AE1DA6E46600DC4C7E /* GRHttpPost.h in Headers */ = {isa = PBXBuildFile; fileRef = 932D84AA1DA6E46600DC4C7E /* GRHttpPost.h */; };
+		932D84AF1DA6E46600DC4C7E /* GRHttpPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 932D84AB1DA6E46600DC4C7E /* GRHttpPost.m */; };
+		932D84B01DA6E46600DC4C7E /* HttpPostStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 932D84AC1DA6E46600DC4C7E /* HttpPostStream.h */; };
+		932D84B11DA6E46600DC4C7E /* HttpPostStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 932D84AD1DA6E46600DC4C7E /* HttpPostStream.m */; };
+		932D84B41DA6EFD700DC4C7E /* HttpPostParams.h in Headers */ = {isa = PBXBuildFile; fileRef = 932D84B21DA6EFD700DC4C7E /* HttpPostParams.h */; };
+		932D84B51DA6EFD700DC4C7E /* HttpPostParams.m in Sources */ = {isa = PBXBuildFile; fileRef = 932D84B31DA6EFD700DC4C7E /* HttpPostParams.m */; };
 		94C47C87E397972CE98F75929F3B706C /* ExpectaObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D2E6F3651F805DD4F4CC3BA91FC2499 /* ExpectaObject.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		98A6C15B46838D70931E042B6B420879 /* Promise+Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0628594FDD15836EEC4C233D2A5C5A6 /* Promise+Properties.swift */; };
 		98C492FBC7B05A4D38114EF284EA2CC5 /* DDDispatchQueueLogFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 19FA76578EEAF620F8887D16E0FC0988 /* DDDispatchQueueLogFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -437,6 +443,12 @@
 		8FD6EC23CD2B1DB98F5E41324D6C81B4 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9040646638CE278EA5FE450862DCF47E /* UIView+AnyPromise.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIView+AnyPromise.h"; path = "Categories/UIKit/UIView+AnyPromise.h"; sourceTree = "<group>"; };
 		932D84A91DA6DC4E00DC4C7E /* MyLogging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyLogging.h; sourceTree = "<group>"; };
+		932D84AA1DA6E46600DC4C7E /* GRHttpPost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRHttpPost.h; sourceTree = "<group>"; };
+		932D84AB1DA6E46600DC4C7E /* GRHttpPost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRHttpPost.m; sourceTree = "<group>"; };
+		932D84AC1DA6E46600DC4C7E /* HttpPostStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpPostStream.h; sourceTree = "<group>"; };
+		932D84AD1DA6E46600DC4C7E /* HttpPostStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpPostStream.m; sourceTree = "<group>"; };
+		932D84B21DA6EFD700DC4C7E /* HttpPostParams.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpPostParams.h; sourceTree = "<group>"; };
+		932D84B31DA6EFD700DC4C7E /* HttpPostParams.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpPostParams.m; sourceTree = "<group>"; };
 		938AD4F62EDBE46E54464E8F8A6B2FDF /* PromiseKit.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = PromiseKit.xcconfig; sourceTree = "<group>"; };
 		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		93CE2B27679DAD0A91B791D416B34E89 /* DDLog.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DDLog.m; path = Classes/DDLog.m; sourceTree = "<group>"; };
@@ -1090,12 +1102,18 @@
 		F2896B9BF48DA4ED8969D4FE4BFA4FDD /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				932D84AA1DA6E46600DC4C7E /* GRHttpPost.h */,
+				932D84AB1DA6E46600DC4C7E /* GRHttpPost.m */,
+				932D84AC1DA6E46600DC4C7E /* HttpPostStream.h */,
+				932D84AD1DA6E46600DC4C7E /* HttpPostStream.m */,
 				9C84FF0F4A5312A900595E6F9F7FE8C9 /* CanonicalRequest.h */,
 				3BD6D052E210190913CEA1B62D64A10F /* CanonicalRequest.m */,
 				514DECF1611B43BEB9421EC5FAE3ED2F /* GRNetwork.h */,
 				E9C996698C9084A3207D4A097DB59493 /* GRNetwork.m */,
 				1B014C5FED413798373D705F3C28667D /* GRNetworkKit.h */,
 				932D84A91DA6DC4E00DC4C7E /* MyLogging.h */,
+				932D84B21DA6EFD700DC4C7E /* HttpPostParams.h */,
+				932D84B31DA6EFD700DC4C7E /* HttpPostParams.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1262,8 +1280,11 @@
 			files = (
 				A7C1FD5CF2BDE37F946D7BE319257850 /* CanonicalRequest.h in Headers */,
 				CF5CD0F05E0C6678B1B4B2C01442705C /* GRNetwork.h in Headers */,
+				932D84B01DA6E46600DC4C7E /* HttpPostStream.h in Headers */,
 				9D63FAE07ECD0E467224A70940FCCAF3 /* GRNetworkKit-umbrella.h in Headers */,
 				FCF868BA0B6782A2936C020CF969E5AA /* GRNetworkKit.h in Headers */,
+				932D84B41DA6EFD700DC4C7E /* HttpPostParams.h in Headers */,
+				932D84AE1DA6E46600DC4C7E /* GRHttpPost.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1476,8 +1497,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				8558638A0258BD85EFFDC7C8FC2C116E /* CanonicalRequest.m in Sources */,
+				932D84B51DA6EFD700DC4C7E /* HttpPostParams.m in Sources */,
+				932D84B11DA6E46600DC4C7E /* HttpPostStream.m in Sources */,
 				8680911B25DD8D97D146C244ED736984 /* GRNetwork.m in Sources */,
 				BF6511AF762E96F0442ECFCCEEB8A48E /* GRNetworkKit-dummy.m in Sources */,
+				932D84AF1DA6E46600DC4C7E /* GRHttpPost.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
