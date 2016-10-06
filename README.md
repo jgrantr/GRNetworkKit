@@ -20,10 +20,6 @@ it, simply add the following line to your Podfile:
 pod "GRNetworkKit"
 ```
 
-## Author
-
-Grant Robinson, grant@zayda.com
-
 ## License
 
 GRNetworkKit is available under the MIT license. See the LICENSE file for more info.
