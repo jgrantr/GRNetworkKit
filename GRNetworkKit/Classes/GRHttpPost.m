@@ -27,7 +27,7 @@
 
 @synthesize values, fileManager;
 
-- (NSInputStream *) stream {
+- (HttpPostStream *) stream {
 	return [[HttpPostStream alloc] initWithPost:self];
 }
 
