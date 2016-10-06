@@ -1,0 +1,6 @@
+framework module GRNetworkKit {
+  umbrella header "GRNetworkKit-umbrella.h"
+
+  export *
+  module * { export * }
+}

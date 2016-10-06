@@ -1,0 +1,6 @@
+framework module Pods_GRNetworkKit_Tests {
+  umbrella header "Pods-GRNetworkKit_Tests-umbrella.h"
+
+  export *
+  module * { export * }
+}
