@@ -134,7 +134,7 @@
 		9274C451D9A242981D3F568B47BE04A5 /* DDASLLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = EFAFB68360594C744E3F71888C7DB69D /* DDASLLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9310F5C9F4F233D227CFC6ECC953299A /* hang.m in Sources */ = {isa = PBXBuildFile; fileRef = C883B7D309C3B57DD9217D753BA9A58F /* hang.m */; };
 		931D410B9F8ACB935883DF8C59F9C93E /* EXPMatchers+postNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = C855544D89833488B829CCD6E230EC42 /* EXPMatchers+postNotification.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		932D84AE1DA6E46600DC4C7E /* GRHttpPost.h in Headers */ = {isa = PBXBuildFile; fileRef = 932D84AA1DA6E46600DC4C7E /* GRHttpPost.h */; };
+		932D84AE1DA6E46600DC4C7E /* GRHttpPost.h in Headers */ = {isa = PBXBuildFile; fileRef = 932D84AA1DA6E46600DC4C7E /* GRHttpPost.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		932D84AF1DA6E46600DC4C7E /* GRHttpPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 932D84AB1DA6E46600DC4C7E /* GRHttpPost.m */; };
 		932D84B01DA6E46600DC4C7E /* HttpPostStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 932D84AC1DA6E46600DC4C7E /* HttpPostStream.h */; };
 		932D84B11DA6E46600DC4C7E /* HttpPostStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 932D84AD1DA6E46600DC4C7E /* HttpPostStream.m */; };
@@ -152,7 +152,7 @@
 		A34D34CC8191121AA9A3CF3C6A7EE068 /* OMGUserAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DEFB72B5620D40FCFE50C4363EC80D9 /* OMGUserAgent.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		A390D36CBBE48BE1217FC1FC64D9867D /* UIActionSheet+AnyPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E0FFB5D641C9AD0193FE2F56536A320 /* UIActionSheet+AnyPromise.m */; };
 		A731548A3A4C9AAEFB2F0C3B2B8E0728 /* SPTCallSite.h in Headers */ = {isa = PBXBuildFile; fileRef = E2E84BB7AA6ACA7003B6549E2BFF99F1 /* SPTCallSite.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A7C1FD5CF2BDE37F946D7BE319257850 /* CanonicalRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C84FF0F4A5312A900595E6F9F7FE8C9 /* CanonicalRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A7C1FD5CF2BDE37F946D7BE319257850 /* CanonicalRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C84FF0F4A5312A900595E6F9F7FE8C9 /* CanonicalRequest.h */; };
 		AA5651522CF4999FC5E500909AE72EAB /* OMGUserAgent.h in Headers */ = {isa = PBXBuildFile; fileRef = E61D7470471704445A25CF8C8EB9ECB9 /* OMGUserAgent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AABA91996293AE13EEDAC90D2A4C1403 /* SPTExample.m in Sources */ = {isa = PBXBuildFile; fileRef = B6495E44700C4D9B63568C9BF9ED01E8 /* SPTExample.m */; };
 		AB55D2CE13FFE5E99612935860271293 /* PMKAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0014ED82D6FBFBD471158F436ED847F /* PMKAlertController.swift */; };
@@ -1278,13 +1278,13 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A7C1FD5CF2BDE37F946D7BE319257850 /* CanonicalRequest.h in Headers */,
+				932D84AE1DA6E46600DC4C7E /* GRHttpPost.h in Headers */,
 				CF5CD0F05E0C6678B1B4B2C01442705C /* GRNetwork.h in Headers */,
 				932D84B01DA6E46600DC4C7E /* HttpPostStream.h in Headers */,
 				9D63FAE07ECD0E467224A70940FCCAF3 /* GRNetworkKit-umbrella.h in Headers */,
 				FCF868BA0B6782A2936C020CF969E5AA /* GRNetworkKit.h in Headers */,
 				932D84B41DA6EFD700DC4C7E /* HttpPostParams.h in Headers */,
-				932D84AE1DA6E46600DC4C7E /* GRHttpPost.h in Headers */,
+				A7C1FD5CF2BDE37F946D7BE319257850 /* CanonicalRequest.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
