@@ -60,8 +60,8 @@
 			[post takeString:obj forKey:key];
 		}
 		else if ([obj isKindOfClass:[NSNumber class]]) {
-			if      (obj == kCFBooleanTrue)  { [post takeString:@"true" forKey:key];  }
-			else if (obj == kCFBooleanFalse) { [post takeString:@"false" forKey:key]; }
+			if      (obj == (id)kCFBooleanTrue)  { [post takeString:@"true" forKey:key];  }
+			else if (obj == (id)kCFBooleanFalse) { [post takeString:@"false" forKey:key]; }
 			else {
 				[post takeString:[obj stringValue] forKey:key];
 			}
