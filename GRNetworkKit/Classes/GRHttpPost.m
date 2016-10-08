@@ -59,6 +59,13 @@
 		if ([obj isKindOfClass:[NSString class]]) {
 			[post takeString:obj forKey:key];
 		}
+		else if ([obj isKindOfClass:[NSNumber class]]) {
+			if      (obj == kCFBooleanTrue)  { [post takeString:@"true" forKey:key];  }
+			else if (obj == kCFBooleanFalse) { [post takeString:@"false" forKey:key]; }
+			else {
+				[post takeString:[obj stringValue] forKey:key];
+			}
+		}
 		else if ([obj isKindOfClass:[NSDictionary class]]) {
 			NSDictionary *dict = obj;
 			if (dict[@"path"]) {

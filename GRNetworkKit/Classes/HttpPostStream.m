@@ -151,17 +151,13 @@ static void sourceFired(void *info) {
 	for (NSString *key in post) {
 		id nextValue = post[key];
 		if ([nextValue isKindOfClass:[NSString class]]) {
-			NSString *dataWithBoundary = [NSString
-										  stringWithFormat:@"--%@%@Content-Disposition: form-data; name=\"%@\"%@%@%@%@",
-										  boundary, NEWLINE_STR, key, NEWLINE_STR, NEWLINE_STR, nextValue, NEWLINE_STR
-										  ];
-			NSData *data = [dataWithBoundary dataUsingEncoding:NSUTF8StringEncoding];
-			contentLength += [data length];
-			[items addObject:data];
+			NSData *dataWithBoundary = [[NSString stringWithFormat:@"--%@\r\nContent-Disposition: form-data; name=\"%@\"\r\nContent-Type: text/plain; charset=utf-8\r\n\r\n%@\r\n", boundary, key, nextValue] dataUsingEncoding:NSUTF8StringEncoding];
+			contentLength += [dataWithBoundary length];
+			[items addObject:dataWithBoundary];
 		}
 		else if ([nextValue isKindOfClass:[DataParam class]]) {
 			DataParam *param = (DataParam *)nextValue;
-			NSData *dataWithBoundary = [[NSString stringWithFormat:@"--%@%@Content-Disposition: form-data; name=\"%@\"; filename=\"image.png\"%@Content-Type: %@%@%@", boundary, NEWLINE_STR, key, NEWLINE_STR, param.contentType, NEWLINE_STR, NEWLINE_STR] dataUsingEncoding:NSUTF8StringEncoding];
+			NSData *dataWithBoundary = [[NSString stringWithFormat:@"--%@\r\nContent-Disposition: form-data; name=\"%@\"; filename=\"image.png\"\r\nContent-Type: %@\r\n\r\n", boundary, key, param.contentType] dataUsingEncoding:NSUTF8StringEncoding];
 			contentLength += [dataWithBoundary length];
 			[items addObject:dataWithBoundary];
 			contentLength += [param.data length];
@@ -172,24 +168,20 @@ static void sourceFired(void *info) {
 		}
 		else if ([nextValue isKindOfClass:[FileParam class]]) {
 			FileParam *param = (FileParam *)nextValue;
-			NSString *filePreamble = [NSString
-									  stringWithFormat:@"--%@%@Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"%@Content-Type: %@%@%@",
-									  boundary, NEWLINE_STR, key, [param.path lastPathComponent], NEWLINE_STR, param.contentType, NEWLINE_STR, NEWLINE_STR
-									  ];
-			NSData *data = [filePreamble dataUsingEncoding:NSUTF8StringEncoding];
-			contentLength += [data length];
-			[items addObject:data];
+			NSData *filePreamble = [[NSString stringWithFormat:@"--%@\r\nContent-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\nContent-Type: %@\r\n\r\n", boundary, key, [param.path lastPathComponent], param.contentType] dataUsingEncoding:NSUTF8StringEncoding];
+			contentLength += [filePreamble length];
+			[items addObject:filePreamble];
 			contentLength += param.size;
 			[items addObject:param];
-			data = [NEWLINE_STR dataUsingEncoding:NSUTF8StringEncoding];
-			contentLength += [data length];
-			[items addObject:data];
+			NSData *newLine = [NEWLINE_STR dataUsingEncoding:NSUTF8StringEncoding];
+			contentLength += [newLine length];
+			[items addObject:newLine];
 		}
 		else {
 			DDLogVerbose(@"Unknown type of object: %@", NSStringFromClass([nextValue class]));
 		}		
 	}
-	NSString *endBoundary = [NSString stringWithFormat:@"--%@--%@", boundary, NEWLINE_STR];
+	NSString *endBoundary = [NSString stringWithFormat:@"--%@--\r\n", boundary];
 	NSData *data = [endBoundary dataUsingEncoding:NSUTF8StringEncoding];
 	contentLength += [data length];
 	[items addObject:data];
