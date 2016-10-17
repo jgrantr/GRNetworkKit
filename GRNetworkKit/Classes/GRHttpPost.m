@@ -56,7 +56,10 @@
 + (instancetype) withValues:(NSDictionary<NSString *,id> *)values {
 	GRHttpPost *post = [[GRHttpPost alloc] init];
 	[values enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-		if ([obj isKindOfClass:[NSString class]]) {
+		if (obj == [NSNull null]) {
+			return;
+		}
+		else if ([obj isKindOfClass:[NSString class]]) {
 			[post takeString:obj forKey:key];
 		}
 		else if ([obj isKindOfClass:[NSNumber class]]) {
