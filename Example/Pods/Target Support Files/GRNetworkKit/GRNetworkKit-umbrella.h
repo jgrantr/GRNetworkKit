@@ -1,6 +1,8 @@
+#ifdef __OBJC__
 #import <UIKit/UIKit.h>
+#endif
 
-#import "CanonicalRequest.h"
+#import "GRHttpPost.h"
 #import "GRNetwork.h"
 #import "GRNetworkKit.h"
 

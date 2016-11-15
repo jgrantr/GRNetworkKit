@@ -38,7 +38,7 @@ A network abstraction that allows easy network requests/responses and streamed-f
 
   s.public_header_files = 'GRNetworkKit/Classes/GR*.h'
   s.frameworks = 'UIKit', 'Foundation'
-  s.dependency 'PromiseKit', '~> 3.5'
+  s.dependency 'PromiseKit', '~> 4.0'
   s.dependency 'CocoaLumberjack', '~> 2.4'
 
 end
