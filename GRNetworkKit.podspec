@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'GRNetworkKit'
-  s.version          = '0.5.5'
+  s.version          = '0.5.6'
   s.summary          = 'Helpful code for making network requests'
 
 # This description is used to generate tags and improve search results.
@@ -38,7 +38,7 @@ A network abstraction that allows easy network requests/responses and streamed-f
 
   s.public_header_files = 'GRNetworkKit/Classes/GR*.h'
   s.frameworks = 'UIKit', 'Foundation'
-  s.dependency 'PromiseKit', '~> 4.0'
+  s.dependency 'PromiseKit'
   s.dependency 'CocoaLumberjack', '~> 2.4'
 
 end
