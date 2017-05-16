@@ -3,11 +3,21 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <PromiseKit/PromiseKit.h>
 
 extern BOOL kGRNetworkAllowInsecureConnections;
 
 extern NSString *kNetworkConnectionStarted;
 extern NSString *kNetworkConnectionFinished;
+extern NSString *kGRNetworkErrorDomain;
+extern NSString *kGRNetworkResponseDataKey;
+extern NSString *kGRNetworkConnectionKey;
+
+typedef NS_ENUM(NSInteger, GRNetworkErrorCode) {
+	GRNetworkErrorCodeUnknown,
+	GRNetworkErrorCodeInvalidHTTPResponseCode,
+	GRNetworkErrorCodeFailedToCreateConnection,
+};
 
 @class GRNetwork;
 
@@ -25,6 +35,12 @@ typedef enum GRRedirectPolicy {
 typedef void (^GRProgressCallback)(GRNetwork *conn, ProgressType type, int64_t byteCount, int64_t totalBytes);
 typedef void (^GRConnComplete)(GRNetwork *conn, NSMutableData *data, NSError *error);
 
+@interface GRNetworkOptions : NSObject
+
+@property (nonatomic, copy) NSSet<NSNumber*> *acceptedResponseCodes;
+
+@end
+
 
 @interface GRNetwork : NSObject
 
@@ -40,6 +56,11 @@ typedef void (^GRConnComplete)(GRNetwork *conn, NSMutableData *data, NSError *er
 /* returns a connection that is started automatically */
 + (GRNetwork *) connWithRequest:(NSURLRequest *)request progress:(GRProgressCallback)progress completion:(GRConnComplete)completion;
 + (GRNetwork *) connWithRequest:(NSURLRequest *)request progress:(GRProgressCallback)progress completion:(GRConnComplete)completion queue:(dispatch_queue_t)queue;
+
++ (AnyPromise *) promiseWithRequest:(NSURLRequest *)request;
++ (AnyPromise *) promiseWithRequest:(NSURLRequest *)request progress:(GRProgressCallback)progress;
++ (AnyPromise *) promiseWithRequest:(NSURLRequest *)request options:(GRNetworkOptions *)options;
++ (AnyPromise *) promiseWithRequest:(NSURLRequest *)request options:(GRNetworkOptions *)options progress:(GRProgressCallback)progress;
 
 /* returns a connection that must be started manually */
 - (GRNetwork *) initWithRequest:(NSURLRequest *)request progress:(GRProgressCallback)progress completion:(GRConnComplete)completion;

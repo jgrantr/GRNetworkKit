@@ -14,6 +14,11 @@ BOOL kGRNetworkAllowInsecureConnections = NO;
 
 NSString *kNetworkConnectionStarted = @"GRNetworkConnectionStarted";
 NSString *kNetworkConnectionFinished = @"GRNetworkConnectionFinished";
+NSString *kGRNetworkErrorDomain = @"net.mr-r.GRNetworkError";
+NSString *kGRNetworkResponseDataKey = @"net.mr-r.GRNetworkResponseData";
+NSString *kGRNetworkConnectionKey = @"net.mr-r.GRNetworkConnection";
+
+
 static NSMutableDictionary *redirectPolicies;
 static NSTimeInterval clockDrift;
 static dispatch_queue_t _policyDispatchQueue;
@@ -64,6 +69,15 @@ static NSNumber* getRedirectPolicyForStatusCode(NSInteger httpStatusCode) {
 }
 
 @synthesize progressBlock, completeBlock, request, responseData, autoStarted, challenge, queue;
+
++ (GRNetworkOptions *) defaultOptions {
+	static GRNetworkOptions *options;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		options = [[GRNetworkOptions alloc] init];
+		options.acceptedResponseCodes = [NSSet setWithArray:@[@(200)]];
+	});
+}
 
 + (void) load {
 	static dispatch_once_t onceToken;
@@ -119,6 +133,34 @@ static NSNumber* getRedirectPolicyForStatusCode(NSInteger httpStatusCode) {
 	return clockDrift;
 }
 
++ (AnyPromise *) promiseWithRequest:(NSURLRequest *)request {
+	return [self promiseWithRequest:request options:[self defaultOptions] progress:nil];
+}
+
++ (AnyPromise *) promiseWithRequest:(NSURLRequest *)request options:(GRNetworkOptions *)options {
+	return [self promiseWithRequest:request options:options progress:nil];
+}
+
++ (AnyPromise *) promiseWithRequest:(NSURLRequest *)request options:(GRNetworkOptions *)options progress:(GRProgressCallback)progress {
+	return [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
+		GRNetwork *network = [self connWithRequest:request progress:progress completion:^(GRNetwork *conn, NSMutableData *data, NSError *error) {
+			if (error) {
+				resolve(error);
+			}
+			else if ([options.acceptedResponseCodes containsObject:@(conn.statusCode)]) {
+				resolve(PMKManifold(data, conn));
+			}
+			else {
+				resolve([NSError errorWithDomain:kGRNetworkErrorDomain code:GRNetworkErrorCodeInvalidHTTPResponseCode userInfo:@{kGRNetworkResponseDataKey : data, NSLocalizedDescriptionKey : [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"invalidHttpResponseTemplate", nil, [NSBundle mainBundle], @"invalid HTTP response code '%ld'", @"Should read something like 'Invalid HTTP response code '500'"), conn.statusCode], kGRNetworkConnectionKey : conn}]);
+			}
+		}];
+	}];
+}
+
++ (AnyPromise *) promiseWithRequest:(NSURLRequest *)request progress:(GRProgressCallback)progress {
+	return [self promiseWithRequest:request options:[self defaultOptions] progress:progress];
+}
+
 + (GRNetwork *) connWithRequest:(NSURLRequest *)request progress:(GRProgressCallback)progress completion:(GRConnComplete)completion {
 	return [self connWithRequest:request progress:progress completion:completion queue:nil];
 }
@@ -158,11 +200,9 @@ static NSNumber* getRedirectPolicyForStatusCode(NSInteger httpStatusCode) {
 	conn = [NSURLConnection connectionWithRequest:request delegate:self];
 	if (conn == nil) {
 		DDLogError(@"error making connection");
-		NSError *error = [NSError errorWithDomain:@"WebService"
-											 code:-1
-										 userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
-												   [NSString stringWithFormat:@"error making connection to '%@'", request.URL],
-												   NSLocalizedDescriptionKey,nil]];
+		NSError *error = [NSError errorWithDomain:kGRNetworkErrorDomain
+											 code:GRNetworkErrorCodeFailedToCreateConnection
+										 userInfo:@{NSLocalizedDescriptionKey : [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"errorMakingConnectionTemplate", nil, [NSBundle mainBundle], @"error making connection to '%@'", @"should read something like 'error making connection to 'https://www.google.com/"), request.URL]}];
 		if (!autoStarted) {
 			dispatch_async(queue, ^{
 				[self notifyDelegate:nil error:error];
