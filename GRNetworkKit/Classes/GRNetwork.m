@@ -18,6 +18,9 @@ NSString *kGRNetworkErrorDomain = @"net.mr-r.GRNetworkError";
 NSString *kGRNetworkResponseDataKey = @"net.mr-r.GRNetworkResponseData";
 NSString *kGRNetworkConnectionKey = @"net.mr-r.GRNetworkConnection";
 
+@implementation GRNetworkOptions
+
+@end
 
 static NSMutableDictionary *redirectPolicies;
 static NSTimeInterval clockDrift;
@@ -77,6 +80,7 @@ static NSNumber* getRedirectPolicyForStatusCode(NSInteger httpStatusCode) {
 		options = [[GRNetworkOptions alloc] init];
 		options.acceptedResponseCodes = [NSSet setWithArray:@[@(200)]];
 	});
+	return options;
 }
 
 + (void) load {
@@ -154,6 +158,9 @@ static NSNumber* getRedirectPolicyForStatusCode(NSInteger httpStatusCode) {
 				resolve([NSError errorWithDomain:kGRNetworkErrorDomain code:GRNetworkErrorCodeInvalidHTTPResponseCode userInfo:@{kGRNetworkResponseDataKey : data, NSLocalizedDescriptionKey : [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"invalidHttpResponseTemplate", nil, [NSBundle mainBundle], @"invalid HTTP response code '%ld'", @"Should read something like 'Invalid HTTP response code '500'"), conn.statusCode], kGRNetworkConnectionKey : conn}]);
 			}
 		}];
+		if (network) {
+			
+		}
 	}];
 }
 
