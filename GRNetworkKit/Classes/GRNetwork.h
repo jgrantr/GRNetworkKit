@@ -74,3 +74,9 @@ typedef void (^GRConnComplete)(GRNetwork *conn, NSMutableData *data, NSError *er
 - (void) cancel;
 
 @end
+
+@interface GRNetwork (GRNetworkConvenience)
+
++ (AnyPromise *) GET:(NSURL *)url;
+
+@end

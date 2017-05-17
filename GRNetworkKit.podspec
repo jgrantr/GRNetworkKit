@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'GRNetworkKit'
-  s.version          = '0.5.7'
+  s.version          = '0.5.8'
   s.summary          = 'Helpful code for making network requests'
 
 # This description is used to generate tags and improve search results.

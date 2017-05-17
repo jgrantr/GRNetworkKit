@@ -60,6 +60,14 @@ static NSNumber* getRedirectPolicyForStatusCode(NSInteger httpStatusCode) {
 	return policy;
 }
 
+@implementation GRNetwork (GRNetworkConvenience)
+
++ (AnyPromise *) GET:(NSURL *)url {
+	return [self promiseWithRequest:[NSURLRequest requestWithURL:url]];
+}
+
+@end
+
 @implementation GRNetwork
 
 
