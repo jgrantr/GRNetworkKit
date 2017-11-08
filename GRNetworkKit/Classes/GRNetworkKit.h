@@ -1,6 +1,6 @@
 //
-//  GRCoreData.h
-//  GRCoreData
+//  GRNetworkKit.h
+//  GRNetworkKit
 //
 //  Created by Grant Robinson on 9/30/16.
 //  Copyright © 2016 Grant Robinson. All rights reserved.

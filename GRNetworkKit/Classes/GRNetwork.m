@@ -20,6 +20,26 @@ NSString *kGRNetworkConnectionKey = @"net.mr-r.GRNetworkConnection";
 
 @implementation GRNetworkOptions
 
++ (instancetype) withMaxRetries:(NSInteger)maxRetries {
+	return [self withRetries:maxRetries responseCodes:nil];
+}
+
++ (instancetype) withResponseCodes:(NSSet<NSNumber *> *)responseCodes {
+	return [self withRetries:0 responseCodes:responseCodes];
+}
+
++ (instancetype) withRetries:(NSInteger)retries responseCodes:(NSSet<NSNumber *> *)responseCodes {
+	GRNetworkOptions *options = [[GRNetworkOptions alloc] init];
+	if (responseCodes == nil || responseCodes.count == 0) {
+		options.acceptedResponseCodes = [NSSet setWithArray:@[@(200)]];
+	}
+	else {
+		options.acceptedResponseCodes = responseCodes;
+	}
+	options.maxRetries = retries;
+	return options;
+}
+
 @end
 
 static NSMutableDictionary *redirectPolicies;
@@ -145,6 +165,32 @@ static NSNumber* getRedirectPolicyForStatusCode(NSInteger httpStatusCode) {
 	return clockDrift;
 }
 
++ (BOOL) isRecoverableError:(NSError *)error {
+	if (error) {
+		if ([error.domain isEqualToString:NSURLErrorDomain]) {
+			switch (error.code) {
+				case NSURLErrorTimedOut:
+				case NSURLErrorCannotFindHost:
+				case NSURLErrorCannotConnectToHost:
+				case NSURLErrorNetworkConnectionLost:
+				case NSURLErrorDNSLookupFailed:
+				case NSURLErrorNotConnectedToInternet:
+				{
+					return YES;
+				}
+				default:
+				{
+					return NO;
+				}
+			}
+		}
+		else {
+			return NO;
+		}
+	}
+	return NO;
+}
+
 + (AnyPromise *) promiseWithRequest:(NSURLRequest *)request {
 	return [self promiseWithRequest:request options:[self defaultOptions] progress:nil];
 }
@@ -153,22 +199,33 @@ static NSNumber* getRedirectPolicyForStatusCode(NSInteger httpStatusCode) {
 	return [self promiseWithRequest:request options:options progress:nil];
 }
 
-+ (AnyPromise *) promiseWithRequest:(NSURLRequest *)request options:(GRNetworkOptions *)options progress:(GRProgressCallback)progress {
-	return [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
-		GRNetwork *network = [self connWithRequest:request progress:progress completion:^(GRNetwork *conn, NSMutableData *data, NSError *error) {
-			if (error) {
-				resolve(error);
-			}
-			else if ([options.acceptedResponseCodes containsObject:@(conn.statusCode)]) {
-				resolve(PMKManifold(data, conn));
++ (void) makeRequest:(NSURLRequest *)request options:(GRNetworkOptions *)options progress:(GRProgressCallback)progress retries:(NSInteger)retries resolver:(PMKResolver)resolve
+{
+	GRNetwork *network = [self connWithRequest:request progress:progress completion:^(GRNetwork *conn, NSMutableData *data, NSError *error) {
+		if (error) {
+			if (options.maxRetries > 0 && retries < options.maxRetries && [self isRecoverableError:error]) {
+				DDLogWarn(@"request to URL '%@' failed with error %@, will attempt retry %ld", request.URL, error, (long)retries+1);
+				[self makeRequest:request options:options progress:progress retries:retries+1 resolver:resolve];
 			}
 			else {
-				resolve([NSError errorWithDomain:kGRNetworkErrorDomain code:GRNetworkErrorCodeInvalidHTTPResponseCode userInfo:@{kGRNetworkResponseDataKey : data, NSLocalizedDescriptionKey : [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"invalidHttpResponseTemplate", nil, [NSBundle mainBundle], @"invalid HTTP response code '%ld'", @"Should read something like 'Invalid HTTP response code '500'"), conn.statusCode], kGRNetworkConnectionKey : conn}]);
+				resolve(error);
 			}
-		}];
-		if (network) {
-			
 		}
+		else if ([options.acceptedResponseCodes containsObject:@(conn.statusCode)]) {
+			resolve(PMKManifold(data, conn));
+		}
+		else {
+			resolve([NSError errorWithDomain:kGRNetworkErrorDomain code:GRNetworkErrorCodeInvalidHTTPResponseCode userInfo:@{kGRNetworkResponseDataKey : data, NSLocalizedDescriptionKey : [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"invalidHttpResponseTemplate", nil, [NSBundle mainBundle], @"invalid HTTP response code '%ld'", @"Should read something like 'Invalid HTTP response code '500'"), conn.statusCode], kGRNetworkConnectionKey : conn}]);
+		}
+	}];
+	if (network) {
+		
+	}
+}
+
++ (AnyPromise *) promiseWithRequest:(NSURLRequest *)request options:(GRNetworkOptions *)options progress:(GRProgressCallback)progress {
+	return [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
+		[self makeRequest:request options:options progress:progress retries:0 resolver:resolve];
 	}];
 }
 

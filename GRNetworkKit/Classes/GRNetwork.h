@@ -37,7 +37,12 @@ typedef void (^GRConnComplete)(GRNetwork *conn, NSMutableData *data, NSError *er
 
 @interface GRNetworkOptions : NSObject
 
++ (instancetype) withMaxRetries:(NSInteger)maxRetries;
++ (instancetype) withResponseCodes:(NSSet<NSNumber *> *)responseCodes;
++ (instancetype) withRetries:(NSInteger) retries responseCodes:(NSSet<NSNumber *> *)responseCodes;
+
 @property (nonatomic, copy) NSSet<NSNumber*> *acceptedResponseCodes;
+@property (nonatomic) NSInteger maxRetries;
 
 @end
 

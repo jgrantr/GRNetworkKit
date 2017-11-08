@@ -10,7 +10,7 @@
 
 /**
  
- File that simplifies making a multi-part HTTP POST to a server.  Initialize it the values you want to send,
+ File that simplifies making a multi-part HTTP POST to a server.  Initialize it with the values you want to send,
  and then you can use it like this:
  
  GRHttpPost *post = ...;
