@@ -52,7 +52,7 @@ static dispatch_queue_t _policyDispatchQueue;
 	GRConnComplete completeBlock;
 	NSURLRequest *request;
 	NSMutableData *responseData;
-	NSHTTPURLResponse *response;
+	NSURLResponse *response;
 	BOOL autoStarted;
 	NSURLAuthenticationChallenge *challenge;
 	int64_t contentLength;
@@ -269,7 +269,10 @@ static NSNumber* getRedirectPolicyForStatusCode(NSInteger httpStatusCode) {
 }
 
 - (GRNetwork *) start {
-	conn = [NSURLConnection connectionWithRequest:request delegate:self];
+	conn = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
+	[conn scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+	[conn start];
+	
 	if (conn == nil) {
 		DDLogError(@"error making connection");
 		NSError *error = [NSError errorWithDomain:kGRNetworkErrorDomain
@@ -316,11 +319,17 @@ static NSNumber* getRedirectPolicyForStatusCode(NSInteger httpStatusCode) {
 }
 
 - (NSInteger) statusCode {
-	return response.statusCode;
+	if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+		return ((NSHTTPURLResponse *)response).statusCode;
+	}
+	return 200;
 }
 
 - (NSDictionary *) headers {
-	return response.allHeaderFields;
+	if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+		return ((NSHTTPURLResponse *)response).allHeaderFields;
+	}
+	return nil;
 }
 
 - (NSURL *) url {
@@ -431,7 +440,7 @@ didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)_challenge
 - (void) connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)_response {
 	NSDate *curDate = [NSDate date];
 	self.responseData = nil;
-	response = (NSHTTPURLResponse *)_response;
+	response = _response;
 	if ([response expectedContentLength] != NSURLResponseUnknownLength) {
 		contentLength = [response expectedContentLength];
 		self.responseData = [NSMutableData dataWithCapacity:(NSUInteger)contentLength];
@@ -440,7 +449,7 @@ didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)_challenge
 		contentLength = -1;
 		self.responseData = [NSMutableData dataWithCapacity:1024];
 	}
-	NSDictionary *headers = [response allHeaderFields];
+	NSDictionary *headers = self.headers;
 	NSString *date = [headers objectForKey:@"Date"];
 	if (date) {
 		// parse the HTTP date header and calculate a time diff
