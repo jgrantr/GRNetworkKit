@@ -86,6 +86,10 @@ static NSNumber* getRedirectPolicyForStatusCode(NSInteger httpStatusCode) {
 	return [self promiseWithRequest:[NSURLRequest requestWithURL:url]];
 }
 
++ (AnyPromise *) GET:(NSURL *)url progress:(GRProgressCallback)progress {
+	return [self promiseWithRequest:[NSURLRequest requestWithURL:url] progress:progress];
+}
+
 @end
 
 @implementation GRNetwork
@@ -462,7 +466,7 @@ didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)_challenge
 	if (progressBlock) {
 		GRProgressCallback localProgress = progressBlock;
 		dispatch_async(queue, ^{
-			localProgress(self, DownloadProgress, [responseData length], contentLength);
+			localProgress(self, GRDownloadProgress, [responseData length], contentLength);
 		});
 	}
 }
@@ -472,7 +476,7 @@ didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)_challenge
 	if (progressBlock) {
 		GRProgressCallback localProgress = progressBlock;
 		dispatch_async(queue, ^{
-			localProgress(self, UploadProgress, totalBytesWritten, totalBytesExpectedToWrite);
+			localProgress(self, GRUploadProgress, totalBytesWritten, totalBytesExpectedToWrite);
 		});
 	}
 }

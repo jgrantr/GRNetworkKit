@@ -21,10 +21,10 @@ typedef NS_ENUM(NSInteger, GRNetworkErrorCode) {
 
 @class GRNetwork;
 
-typedef enum ProgressType {
-	UploadProgress = 1,
-	DownloadProgress = 2
-} ProgressType;
+typedef enum GRProgressType {
+	GRUploadProgress = 1,
+	GRDownloadProgress = 2
+} GRProgressType;
 
 typedef enum GRRedirectPolicy {
 	GRRedirectPolicyCloneOriginalRequest,
@@ -32,7 +32,7 @@ typedef enum GRRedirectPolicy {
 	GRRedirectPolicyUseSystemDefault,
 } GRRedirectPolicy;
 
-typedef void (^GRProgressCallback)(GRNetwork *conn, ProgressType type, int64_t byteCount, int64_t totalBytes);
+typedef void (^GRProgressCallback)(GRNetwork *conn, GRProgressType type, int64_t byteCount, int64_t totalBytes);
 typedef void (^GRConnComplete)(GRNetwork *conn, NSMutableData *data, NSError *error);
 
 @interface GRNetworkOptions : NSObject
@@ -83,5 +83,7 @@ typedef void (^GRConnComplete)(GRNetwork *conn, NSMutableData *data, NSError *er
 @interface GRNetwork (GRNetworkConvenience)
 
 + (AnyPromise *) GET:(NSURL *)url;
+
++ (AnyPromise *) GET:(NSURL *)url progress:(GRProgressCallback)progress;
 
 @end
